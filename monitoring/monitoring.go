@@ -59,8 +59,8 @@ func GenerateReport() []byte {
 		if err != nil {
 			message += fmt.Sprintf("failed to get vnstat traffic %v\n", err)
 		} else {
-			totalUp = tup
-			totalDown = tdown
+			totalUp = tup + networkUp
+			totalDown = tdown + networkDown
 		}
 	}
 

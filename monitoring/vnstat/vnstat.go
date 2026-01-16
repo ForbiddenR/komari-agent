@@ -3,11 +3,13 @@ package vnstat
 import (
 	"encoding/json"
 	"os/exec"
+	"time"
 )
 
 var (
-	networkIn = 0
-	networkOut = 0
+	networkIn      uint64 = 0
+	networkOut     uint64 = 0
+	lastUpdateTime        = time.Unix(0, 0)
 )
 
 type VnstatJson struct {
@@ -57,6 +59,12 @@ type RT struct {
 // }
 
 func GetTotalTraffic() (uint64, uint64, error) {
+	if time.Since(lastUpdateTime) < 5*time.Minute {
+		return networkIn, networkOut, nil
+	}
+	defer func() {
+		lastUpdateTime = time.Now()
+	}()
 	o, err := exec.Command("/usr/bin/vnstat", "--json", "m").Output()
 	if err != nil {
 		return 0, 0, err
@@ -66,16 +74,9 @@ func GetTotalTraffic() (uint64, uint64, error) {
 	if err != nil {
 		return 0, 0, err
 	}
-	var networkIn, networkOut uint64
 	for _, iface := range result.Interfaces {
 		networkIn += iface.Traffic.Total.Rx
 		networkOut += iface.Traffic.Total.Tx
 	}
-	var factor uint64
-	if result.JsonVersion == "1" {
-		factor = 1024
-	} else {
-		factor = 1
-	}
-	return networkIn * factor, networkOut * factor, nil
+	return networkIn, networkOut, nil
 }
