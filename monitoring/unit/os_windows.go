@@ -37,9 +37,9 @@ func OSName() string {
 	if err == nil {
 		if buildNumber, err2 := strconv.Atoi(buildNumberStr); err2 == nil && buildNumber >= 22000 {
 			// 旧字段可能仍然写着 Windows 10，把前缀替换为 Windows 11
-			if strings.HasPrefix(productName, "Windows 10 ") {
-				edition := strings.TrimPrefix(productName, "Windows 10 ")
-				return "Windows 11 " + edition
+			after, ok := strings.CutPrefix(productName, "Windows 10 ")
+			if ok {
+				return "Windows 11 " + after
 			}
 			if productName == "Windows 10" { // 极端精简情况
 				return "Windows 11"

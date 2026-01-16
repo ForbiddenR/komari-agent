@@ -7,7 +7,6 @@ import (
 
 	pkg_flags "github.com/komari-monitor/komari-agent/cmd/flags"
 	monitoring "github.com/komari-monitor/komari-agent/monitoring/unit"
-	"github.com/komari-monitor/komari-agent/monitoring/vnstat"
 )
 
 var flags = pkg_flags.GlobalConfig
@@ -54,15 +53,15 @@ func GenerateReport() []byte {
 		message += fmt.Sprintf("failed to get network speed: %v\n", err)
 	}
 
-	if flags.Vnstat {
-		tup, tdown, err := vnstat.GetTotalTraffic()
-		if err != nil {
-			message += fmt.Sprintf("failed to get vnstat traffic %v\n", err)
-		} else {
-			totalUp = tup + networkUp
-			totalDown = tdown + networkDown
-		}
-	}
+	// if flags.Vnstat {
+	// 	tup, tdown, err := vnstat.GetTotalTraffic()
+	// 	if err != nil {
+	// 		message += fmt.Sprintf("failed to get vnstat traffic %v\n", err)
+	// 	} else {
+	// 		totalUp = tup + networkUp
+	// 		totalDown = tdown + networkDown
+	// 	}
+	// }
 
 	data["network"] = map[string]any{
 		"up":        networkUp,

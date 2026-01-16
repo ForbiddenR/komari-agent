@@ -5,7 +5,5 @@ import (
 )
 
 func Uptime() (uint64, error) {
-
 	return host.Uptime()
-
 }

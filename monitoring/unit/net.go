@@ -210,7 +210,7 @@ func getNetworkSpeedFallback(includeNics, excludeNics map[string]struct{}) (tota
 	upSpeed = totalUp2 - totalUp1
 	downSpeed = totalDown2 - totalDown1
 
-	return totalUp2, totalDown2, upSpeed, downSpeed, nil
+	return networkUp + totalUp2, networkDown + totalDown2, upSpeed, downSpeed, nil
 }
 
 func parseNics(nics string) map[string]struct{} {
