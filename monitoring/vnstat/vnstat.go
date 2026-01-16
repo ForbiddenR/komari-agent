@@ -74,9 +74,12 @@ func GetTotalTraffic() (uint64, uint64, error) {
 	if err != nil {
 		return 0, 0, err
 	}
+	var in, out uint64
 	for _, iface := range result.Interfaces {
-		networkIn += iface.Traffic.Total.Rx
-		networkOut += iface.Traffic.Total.Tx
+		in += iface.Traffic.Total.Rx
+		out += iface.Traffic.Total.Tx
 	}
-	return networkIn, networkOut, nil
+	networkIn = in
+	networkOut = out
+	return in, out, nil
 }
