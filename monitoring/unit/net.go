@@ -218,7 +218,7 @@ func parseNics(nics string) map[string]struct{} {
 		return nil
 	}
 	nicSet := make(map[string]struct{})
-	for _, nic := range strings.Split(nics, ",") {
+	for nic := range strings.SplitSeq(nics, ",") {
 		nicSet[strings.TrimSpace(nic)] = struct{}{}
 	}
 	return nicSet
